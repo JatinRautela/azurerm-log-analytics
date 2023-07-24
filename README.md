@@ -1,0 +1,1 @@
+# azurerm-log-analytics
