@@ -1,16 +1,25 @@
 variable "workspace_name" {
   description = "The name of this Log Analytics workspace."
   type        = string
+  default = "workspacename"
 }
 
 variable "resource_group_name" {
   description = "The name of the resource group to create the resources in."
   type        = string
+  default = "rgname"
 }
 
 variable "location" {
   description = "The location to create the resources in."
   type        = string
+  default = "northeurope"
+}
+
+variable "sku" {
+  description = "value"
+  type        = string
+  default     = "PerGB2018"
 }
 
 variable "local_authentication_disabled" {
@@ -41,4 +50,47 @@ variable "tags" {
   description = "A map of tags to assign to the resources."
   type        = map(string)
   default     = {}
+}
+
+variable "name" {
+  type        = string
+  description = "A string value to describe prefix of all the resources"
+  default     = ""
+}
+
+variable "default_tags" {
+  type        = map(string)
+  description = "A map to add common tags to all the resources"
+  default = {
+    "Scope" : "ACI"
+    "CreatedBy" : "Terraform"
+  }
+}
+
+variable "common_tags" {
+  type        = map(string)
+  description = "A map to add common tags to all the resources"
+  default     = {}
+}
+
+variable "diagnostic_setting_name" {
+  description = "The name of this azurerm monitor diagnostic setting."
+  type        = string
+  default = "diagnostic-setting-name"
+}
+
+variable "diagnostic_setting_enabled_metrics" {
+  description = "A map of metrics categories and their settings to be enabled for this diagnostic setting."
+  type        = map(object({
+    enabled         = bool
+    retention_days  = number
+    retention_enabled = bool
+  }))
+  default = {
+    "AllMetrics" = {
+      enabled = true
+      retention_days = 0
+      retention_enabled = false
+    }
+  }
 }

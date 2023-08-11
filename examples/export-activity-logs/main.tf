@@ -2,12 +2,14 @@ provider "azurerm" {
   features {}
 }
 
-resource "random_id" "this" {
-  byte_length = 8
+locals {
+  env         = var.env
+  name        = var.pname
+  name_prefix = "${local.env}${local.name}"
 }
 
-resource "azurerm_resource_group" "this" {
-  name     = "rg-${random_id.this.hex}"
+resource "azurerm_resource_group" "rg" {
+  name     = "${local.name_prefix}-rg"
   location = var.location
 }
 
@@ -15,16 +17,25 @@ module "log_analytics" {
   # source = "git::https://github.com/JatinRautela/azurerm-log-analytics.git"
   source = "../.."
 
-  workspace_name      = "log-${random_id.this.hex}"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  workspace_name      = "${local.name_prefix}-log"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  diagnostic_setting_name = "${local.name_prefix}-log-diagnostic-setting"
+
+  diagnostic_setting_enabled_metrics = {
+    "AllMetrics" = {
+      enabled          = true
+      retention_days   = 30
+      retention_enabled = true
+    }
+  }
 }
 
-data "azurerm_subscription" "this" {}
+data "azurerm_subscription" "subscription" {}
 
-resource "azurerm_monitor_diagnostic_setting" "this" {
-  name                       = "activity-logs-${random_id.this.hex}"
-  target_resource_id         = data.azurerm_subscription.this.id
+resource "azurerm_monitor_diagnostic_setting" "diagnostic_settings" {
+  name                       = "${local.name_prefix}-activity-logs"
+  target_resource_id         = data.azurerm_subscription.subscription.id
   log_analytics_workspace_id = module.log_analytics.workspace_id
 
   enabled_log {

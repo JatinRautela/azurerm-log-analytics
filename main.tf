@@ -1,18 +1,20 @@
-resource "azurerm_log_analytics_workspace" "this" {
+resource "azurerm_log_analytics_workspace" "log_analytics_wname" {
   name                          = var.workspace_name
   resource_group_name           = var.resource_group_name
   location                      = var.location
   local_authentication_disabled = var.local_authentication_disabled
-  sku                           = "PerGB2018"
+  sku                           = var.sku
   retention_in_days             = var.retention_in_days
 
-  tags = var.tags
+  tags = merge(local.common_tags, tomap({
+    "Name" : local.project_name_prefix
+  }))
 }
 
-resource "azurerm_monitor_diagnostic_setting" "this" {
-  name                           = "audit-logs"
-  target_resource_id             = azurerm_log_analytics_workspace.this.id
-  log_analytics_workspace_id     = azurerm_log_analytics_workspace.this.id
+resource "azurerm_monitor_diagnostic_setting" "diagnostic_settings" {
+  name                           = var.diagnostic_setting_name
+  target_resource_id             = azurerm_log_analytics_workspace.log_analytics_wname.id
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.log_analytics_wname.id
   log_analytics_destination_type = var.log_analytics_destination_type
 
   dynamic "enabled_log" {
@@ -23,13 +25,17 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
     }
   }
 
-  metric {
-    category = "AllMetrics"
-    enabled  = true
+  dynamic "metric" {
+    for_each = var.diagnostic_setting_enabled_metrics
 
-    retention_policy {
-      days    = 0
-      enabled = false
+    content {
+      category = metric.key
+      enabled  = metric.value.enabled
+
+      retention_policy {
+        days    = metric.value.retention_days
+        enabled = metric.value.retention_enabled
+      }
     }
   }
 }
