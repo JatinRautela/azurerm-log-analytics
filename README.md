@@ -1,5 +1,35 @@
 # azurerm-log-analytics
 
+## Azure Log Analytics Workspace and Diagnostic Settings Terraform Module
+
+This Terraform module creates an Azure Log Analytics Workspace along with diagnostic settings for monitoring. The module offers the following features and resources:
+
+### Features:
+
+- **Azure Log Analytics Workspace:** Deploys an Azure Log Analytics Workspace, allowing you to collect and analyze data from various sources.
+
+- **Diagnostic Settings:** Sets up diagnostic settings for the Log Analytics Workspace, enabling comprehensive monitoring and alerting.
+
+### Resources Created:
+
+- **Azure Log Analytics Workspace (`azurerm_log_analytics_workspace`):** 
+  - Name: `var.workspace_name`
+  - Resource Group: `var.resource_group_name`
+  - Location: `var.location`
+  - SKU: `var.sku`
+  - Retention in Days: `var.retention_in_days`
+  - Local Authentication Disabled: `var.local_authentication_disabled`
+  - Tags: Common tags merged with `"Name": local.project_name_prefix`
+
+- **Diagnostic Settings (`azurerm_monitor_diagnostic_setting`):** 
+  - Name: `var.diagnostic_setting_name`
+  - Target Resource: `azurerm_log_analytics_workspace.log_analytics_wname`
+  - Log Analytics Workspace ID: `azurerm_log_analytics_workspace.log_analytics_wname.id`
+  - Log Analytics Destination Type: `var.log_analytics_destination_type`
+  - Enabled Log Categories: `var.diagnostic_setting_enabled_log_categories`
+  - Enabled Metric Categories: Configurable through `var.diagnostic_setting_enabled_metrics`
+    - Metrics include retention policy settings.
+
 ## Prerequisites
 
 Before using this Terraform module, ensure that you have the following prerequisites:
