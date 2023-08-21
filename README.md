@@ -114,3 +114,43 @@ module "log_analytics" {
 | workspace_customer_id | The workspace (customer) ID of the Log Analytics workspace. |
 | primary_shared_key | The primary shared key of the Log Analytics workspace. |
 | secondary_shared_key | The secondary shared key of the Log Analytics workspace. |
+
+## List of variables
+
+| Variable Name                                 | Description                                                        | Type            | Required | Default Value       |
+|-----------------------------------------------|--------------------------------------------------------------------|-----------------|----------|---------------------|
+| `workspace_name`                              | The name of this Log Analytics workspace.                         | `string`        | Yes      |                     |
+| `resource_group_name`                         | The name of the resource group to create the resources in.        | `string`        | Yes      |                     |
+| `location`                                    | The location to create the resources in.                          | `string`        | Yes      |                     |
+| `sku`                                         | The SKU for the Log Analytics workspace.                          | `string`        | No       | `"PerGB2018"`       |
+| `local_authentication_disabled`                | Specifies if the Log Analytics Workspace should enforce authentication using Azure AD. | `bool` | No | `true` |
+| `retention_in_days`                           | The number of days that logs should be retained.                  | `number`        | No       | `90`                |
+| `log_analytics_destination_type`              | The type of log analytics destination to use for this Log Analytics Workspace. | `string` | No | `null`            |
+| `diagnostic_setting_enabled_log_categories`   | A list of log categories to be enabled for this diagnostic setting. | `list(string)` | No    | `["Audit"]`       |
+| `tags`                                        | A map of tags to assign to the resources.                         | `map(string)`   | No       |                     |
+| `name`                                        | A string value to describe prefix of all the resources.            | `string`        | No       | `""`                |
+| `default_tags`                                | A map to add common tags to all the resources.                    | `map(string)`   | No       | See below           |
+| `common_tags`                                 | A map to add common tags to all the resources.                    | `map(string)`   | No       | `{}`                |
+| `diagnostic_setting_name`                     | The name of this azurerm monitor diagnostic setting.              | `string`        | No       | `"diagnostic-setting-name"` |
+| `diagnostic_setting_enabled_metrics`           | A map of metrics categories and their settings to be enabled for this diagnostic setting. | `map(object)` | No | See below |
+
+Default value for `default_tags`:
+```hcl
+{
+  "Scope": "ACI",
+  "CreatedBy": "Terraform"
+}
+```
+
+Default value for `diagnostic_setting_enabled_metrics`:
+```hcl
+{
+  "AllMetrics" = {
+    enabled = true
+    retention_days = 0
+    retention_enabled = false
+  }
+}
+```
+
+Please note that the variables in the "Required" column that are marked "No" can be left empty if you don't want to provide a value for them.

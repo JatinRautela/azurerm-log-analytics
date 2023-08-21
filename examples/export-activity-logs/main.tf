@@ -17,15 +17,15 @@ module "log_analytics" {
   # source = "git::https://github.com/JatinRautela/azurerm-log-analytics.git"
   source = "../.."
 
-  workspace_name      = "${local.name_prefix}-log"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  workspace_name          = "${local.name_prefix}-log"
+  resource_group_name     = azurerm_resource_group.rg.name
+  location                = azurerm_resource_group.rg.location
   diagnostic_setting_name = "${local.name_prefix}-log-diagnostic-setting"
 
   diagnostic_setting_enabled_metrics = {
     "AllMetrics" = {
-      enabled          = true
-      retention_days   = 30
+      enabled           = true
+      retention_days    = 30
       retention_enabled = true
     }
   }
