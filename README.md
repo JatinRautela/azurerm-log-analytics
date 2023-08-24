@@ -1,5 +1,31 @@
 # azurerm-log-analytics
 
+[![Lint Status](https://github.com/tothenew/terraform-aws-template/workflows/Lint/badge.svg)](https://github.com/tothenew/terraform-aws-template/actions)
+[![LICENSE](https://img.shields.io/github/license/tothenew/terraform-aws-template)](https://github.com/tothenew/terraform-aws-template/blob/master/LICENSE)
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [azurerm](#requirement\_terraform) | >= 3.39.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_log_analytics_workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) | resource |
+| [azurerm_monitor_diagnostic_setting](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
+
 ## Azure Log Analytics Workspace and Diagnostic Settings Terraform Module
 
 This Terraform module creates an Azure Log Analytics Workspace along with diagnostic settings for monitoring. The module offers the following features and resources:
@@ -184,3 +210,11 @@ Default value for `diagnostic_setting_enabled_metrics`:
 ```
 
 Please note that the variables in the "Required" column that are marked "No" can be left empty if you don't want to provide a value for them.
+
+## Authors
+
+Module managed by [TO THE NEW Pvt. Ltd.](https://github.com/tothenew)
+
+## License
+
+Apache 2 Licensed. See [LICENSE](https://github.com/tothenew/terraform-aws-template/blob/main/LICENSE) for full details.
